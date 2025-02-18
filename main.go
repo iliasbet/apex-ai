@@ -28,18 +28,44 @@ var tmpl = template.Must(template.New("index").Parse(`
 		body {
 			font-family: 'Lexend Deca', sans-serif;
 		}
+		/* Custom Scrollbar Styles */
+		::-webkit-scrollbar {
+			width: 8px;
+			background: transparent;
+		}
+		::-webkit-scrollbar-track {
+			background: rgba(0, 0, 0, 0.05);
+			backdrop-filter: blur(8px);
+		}
+		::-webkit-scrollbar-thumb {
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.02);
+			border-radius: 4px;
+			backdrop-filter: blur(8px);
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+		/* Firefox */
+		* {
+			scrollbar-width: thin;
+			scrollbar-color: rgba(255, 255, 255, 0.05) rgba(0, 0, 0, 0.05);
+		}
 		/* Physics canvas container */
 		#physics-container {
 			position: fixed;
 			width: 100%;
 			height: 100vh;
-			pointer-events: all;
+			pointer-events: none;
 			z-index: 1;
 			transform-style: preserve-3d;
 			will-change: transform;
 			clip-path: none;
 			top: 0;
 			left: 0;
+		}
+		#physics-container canvas {
+			pointer-events: auto;
 		}
 		.logo-circle {
 			width: 200px;
@@ -61,20 +87,20 @@ var tmpl = template.Must(template.New("index").Parse(`
 		.gradient-animation {
 			position: relative;
 			overflow: hidden;
-			background: #0a0a0a;
+			background: rgba(0, 0, 0, 0.95);
 		}
 		.gradient-layer {
 			position: absolute;
 			inset: -150%;
-			opacity: 0.7;
-			mix-blend-mode: plus-lighter;
+			opacity: 0.8;
+			mix-blend-mode: screen;
 			transition: transform 0.2s ease-out;
 		}
 		.gradient-layer-1 {
 			background: radial-gradient(circle at center,
 				transparent 0%,
-				rgba(37, 99, 235, 0.9) 25%,  /* Bright blue */
-				rgba(30, 58, 138, 0.8) 45%,   /* Dark blue */
+				rgba(255, 0, 128, 0.8) 25%,  /* Hot pink */
+				rgba(128, 0, 255, 0.8) 45%,   /* Deep purple */
 				transparent 75%
 			);
 			animation: moveGradient1 25s linear infinite;
@@ -82,8 +108,8 @@ var tmpl = template.Must(template.New("index").Parse(`
 		.gradient-layer-2 {
 			background: radial-gradient(circle at center,
 				transparent 0%,
-				rgba(59, 130, 246, 0.8) 30%,   /* Medium blue */
-				rgba(29, 78, 216, 0.7) 50%,   /* Blue 700 */
+				rgba(0, 255, 200, 0.8) 30%,   /* Turquoise */
+				rgba(0, 128, 255, 0.8) 50%,   /* Electric blue */
 				transparent 80%
 			);
 			animation: moveGradient2 20s linear infinite;
@@ -91,44 +117,110 @@ var tmpl = template.Must(template.New("index").Parse(`
 		.gradient-layer-3 {
 			background: radial-gradient(circle at center,
 				transparent 0%,
-				rgba(96, 165, 250, 0.7) 35%,   /* Light blue */
-				rgba(37, 99, 235, 0.6) 55%,     /* Blue 600 */
+				rgba(255, 64, 0, 0.8) 35%,    /* Bright orange */
+				rgba(255, 0, 64, 0.8) 55%,    /* Deep red */
 				transparent 85%
 			);
 			animation: moveGradient3 30s linear infinite;
 		}
 		/* Enhance animation ranges for more dynamic movement */
 		@keyframes moveGradient1 {
-			0% { transform: rotate(0deg) scale(1) translate(0%, 0%); }
-			33% { transform: rotate(120deg) scale(1.4) translate(7%, 7%); }
-			66% { transform: rotate(240deg) scale(0.8) translate(-7%, -7%); }
-			100% { transform: rotate(360deg) scale(1) translate(0%, 0%); }
+			0% { transform: rotate(0deg) scale(1.2) translate(0%, 0%); }
+			33% { transform: rotate(120deg) scale(1.8) translate(15%, 15%); }
+			66% { transform: rotate(240deg) scale(1) translate(-15%, -15%); }
+			100% { transform: rotate(360deg) scale(1.2) translate(0%, 0%); }
 		}
 		@keyframes moveGradient2 {
-			0% { transform: rotate(360deg) scale(1.3) translate(7%, -7%); }
-			33% { transform: rotate(240deg) scale(0.9) translate(-7%, 7%); }
-			66% { transform: rotate(120deg) scale(1.2) translate(7%, 7%); }
-			100% { transform: rotate(0deg) scale(1.3) translate(7%, -7%); }
+			0% { transform: rotate(360deg) scale(1.5) translate(15%, -15%); }
+			33% { transform: rotate(240deg) scale(1.1) translate(-15%, 15%); }
+			66% { transform: rotate(120deg) scale(1.6) translate(15%, 15%); }
+			100% { transform: rotate(0deg) scale(1.5) translate(15%, -15%); }
 		}
 		@keyframes moveGradient3 {
-			0% { transform: rotate(180deg) scale(0.8) translate(-7%, 7%); }
-			33% { transform: rotate(300deg) scale(1.3) translate(7%, -7%); }
-			66% { transform: rotate(60deg) scale(0.9) translate(-7%, -7%); }
-			100% { transform: rotate(180deg) scale(0.8) translate(-7%, 7%); }
+			0% { transform: rotate(180deg) scale(1) translate(-15%, 15%); }
+			33% { transform: rotate(300deg) scale(1.7) translate(15%, -15%); }
+			66% { transform: rotate(60deg) scale(1.1) translate(-15%, -15%); }
+			100% { transform: rotate(180deg) scale(1) translate(-15%, 15%); }
 		}
 		/* Adjust noise texture */
 		.noise-overlay {
 			position: absolute;
 			inset: 0;
 			background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-			opacity: 0.05;
-			mix-blend-mode: color-dodge;
+			opacity: 0.08;
+			mix-blend-mode: overlay;
 			pointer-events: none;
 		}
 		/* Make sure the solutions section has proper positioning */
 		.solutions-section {
 			position: relative;
-			z-index: 1;
+			z-index: 2;
+			background: rgba(0, 0, 0, 0.7);
+		}
+		/* Update other sections */
+		.bubbles-section {
+			position: relative;
+			z-index: 2;
+			background: rgba(0, 0, 0, 0.7);
+		}
+		#apply-form {
+			background: rgba(0, 0, 0, 0.7);
+		}
+		.bg-gray-950 {
+			background-color: #000000;
+		}
+		
+		/* Remove the gradient overlay in bubbles section */
+		.bubbles-section .bg-gradient-to-b {
+			display: none;
+		}
+		/* Add styles for translucent buttons */
+		.btn-translucent {
+			background: rgba(255, 255, 255, 0.15);
+			backdrop-filter: blur(12px);
+			border: 2px solid rgba(255, 255, 255, 0.4);
+			transition: all 0.3s ease;
+			text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+			box-shadow: 0 0 20px rgba(255, 255, 255, 0.2),
+						inset 0 0 15px rgba(255, 255, 255, 0.1);
+			font-weight: 600;
+			letter-spacing: 0.5px;
+		}
+		.btn-translucent:hover {
+			background: rgba(255, 255, 255, 0.25);
+			border-color: rgba(255, 255, 255, 0.6);
+			transform: translateY(-2px);
+			box-shadow: 0 0 30px rgba(255, 255, 255, 0.3),
+						inset 0 0 20px rgba(255, 255, 255, 0.2);
+			text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+		}
+		/* Add glowing text effect */
+		.glow-text {
+			color: black;
+			text-shadow: 0 0 10px rgba(255, 255, 255, 0.3),
+						0 0 20px rgba(255, 255, 255, 0.2),
+						0 0 30px rgba(255, 255, 255, 0.1);
+			background: linear-gradient(to right,
+				#000 0%,
+				#222 50%,
+				#000 100%
+			);
+			-webkit-background-clip: text;
+			background-clip: text;
+			animation: glow 2s ease-in-out infinite alternate;
+		}
+
+		@keyframes glow {
+			from {
+				text-shadow: 0 0 10px rgba(255, 255, 255, 0.3),
+							0 0 20px rgba(255, 255, 255, 0.2),
+							0 0 30px rgba(255, 255, 255, 0.1);
+			}
+			to {
+				text-shadow: 0 0 15px rgba(255, 255, 255, 0.4),
+							0 0 25px rgba(255, 255, 255, 0.3),
+							0 0 35px rgba(255, 255, 255, 0.2);
+			}
 		}
 	</style>
 </head>
@@ -137,7 +229,7 @@ var tmpl = template.Must(template.New("index").Parse(`
 	<div id="physics-container"></div>
 
 	<!-- HERO SECTION -->
-	<section class="gradient-animation min-h-[85vh] flex flex-col justify-center items-center text-center px-4 relative z-10"
+	<section class="gradient-animation min-h-[65vh] flex flex-col justify-center items-center text-center px-4 relative z-10"
 		x-data="{ 
 			mouseX: 0, 
 			mouseY: 0,
@@ -156,115 +248,29 @@ var tmpl = template.Must(template.New("index").Parse(`
 		<div class="gradient-layer gradient-layer-2" x-ref="layer2"></div>
 		<div class="gradient-layer gradient-layer-3" x-ref="layer3"></div>
 		<div class="noise-overlay"></div>
-		<h1 class="text-7xl md:text-9xl font-bold mb-4 tracking-tight relative z-10">
-			<span class="italic">APEX</span> AI
+		<h1 class="text-7xl md:text-9xl font-bold mb-8 tracking-tight relative z-10">
+			<span class="italic text-blue-50/90">APEX</span> AI
 		</h1>
-		<div class="space-y-8 relative z-10">
+		<div class="space-y-12 relative z-10">
 			<!-- Main catchline -->
-			<p class="text-4xl md:text-6xl lg:text-7xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-gray-950 via-black to-gray-950">
+			<p class="text-3xl md:text-5xl lg:text-6xl font-medium text-black">
 				Turn AI into profit
 			</p>
-			<!-- Secondary catchlines -->
-			<div class="max-w-2xl mx-auto space-y-1">
-				<p class="text-lg md:text-xl text-gray-300 font-light tracking-wide">Your Proven Blueprint</p>
-				<p class="text-base md:text-lg text-gray-400 font-light">for Business Growth</p>
-			</div>
 		</div>
 		<!-- Scroll to form button -->
 		<button onclick="document.getElementById('apply-form').scrollIntoView({behavior: 'smooth', block: 'center'})" 
-			class="bg-blue-600 hover:bg-blue-700 transition px-8 py-4 rounded-lg text-lg relative z-10 mt-8">
+			class="btn-translucent px-10 py-5 rounded-lg text-xl relative z-10 mt-24 uppercase tracking-wider">
 			Apply Now
 		</button>
 	</section>
 
 	<!-- BUBBLES SHOWCASE SECTION -->
-	<section class="bubbles-section min-h-screen relative flex flex-col justify-center items-center py-32 px-4">
-		<div class="max-w-4xl mx-auto text-center relative z-[2]">
-			<h2 class="text-3xl md:text-4xl font-medium mb-8">Powered by Leading AI Technologies</h2>
-			<p class="text-xl text-blue-200 mb-8">Leveraging the most advanced AI platforms to drive your business forward</p>
+	<section class="bubbles-section min-h-screen relative flex flex-col justify-start items-center py-16 px-4">
+		<div class="max-w-4xl mx-auto text-center relative z-10 mt-64">
+			<h2 class="text-3xl md:text-4xl font-medium mb-4">Powered by Leading AI Technologies</h2>
+			<p class="text-xl text-blue-200">Leveraging the most advanced AI platforms to drive your business forward</p>
 		</div>
 		<div class="absolute inset-0 z-[1] bg-gradient-to-b from-gray-950/0 via-blue-950/10 to-gray-950/0"></div>
-	</section>
-
-	<!-- SOLUTION SECTION -->
-	<section class="py-32 px-4 solutions-section min-h-screen relative z-10">
-		<div class="max-w-3xl mx-auto">
-			<h2 class="text-2xl font-medium mb-12 text-center">Solutions</h2>
-			<div class="space-y-8">
-				<div class="p-8 bg-blue-900/40 backdrop-blur-sm rounded-lg border border-blue-800/50">
-					<h3 class="text-2xl font-medium mb-4">Expert Guidance</h3>
-					<p class="text-blue-200 text-lg">Learn from industry experts with proven track records in AI implementation.</p>
-				</div>
-				<div class="p-8 bg-blue-900/40 backdrop-blur-sm rounded-lg border border-blue-800/50">
-					<h3 class="text-2xl font-medium mb-4">Strategic Implementation</h3>
-					<p class="text-blue-200 text-lg">Step-by-step blueprint for seamless AI integration into your business.</p>
-				</div>
-				<div class="p-8 bg-blue-900/40 backdrop-blur-sm rounded-lg border border-blue-800/50">
-					<h3 class="text-2xl font-medium mb-4">ROI Optimization</h3>
-					<p class="text-blue-200 text-lg">Proven frameworks to maximize your return on AI investments.</p>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- APPLICATION FORM SECTION -->
-	<section id="apply-form" class="py-16 px-4">
-		<div class="max-w-xl mx-auto">
-			<h2 class="text-2xl font-medium mb-2 text-center">Apply Now</h2>
-			<p class="text-gray-400 text-center mb-8">Join the ranks of successful AI-powered businesses</p>
-			<div class="border border-blue-800/50 rounded-lg p-6">
-				<form hx-post="/apply" hx-target="#form-response" hx-swap="innerHTML" class="space-y-4">
-					<div>
-						<label class="block mb-1 text-sm text-blue-200">Name</label>
-						<input type="text" name="name" required 
-							class="w-full p-2 rounded bg-blue-900/40 border border-blue-800/50 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-white">
-					</div>
-					<div>
-						<label class="block mb-1 text-sm text-blue-200">Email</label>
-						<input type="email" name="email" required 
-							class="w-full p-2 rounded bg-blue-900/40 border border-blue-800/50 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-white">
-					</div>
-					<button type="submit" 
-						class="w-full bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded text-sm font-medium">
-						Submit Application
-					</button>
-				</form>
-				<div id="form-response" class="mt-4"></div>
-			</div>
-		</div>
-	</section>
-
-	<!-- PROOF SECTION -->
-	<section class="py-16 px-4">
-		<div class="max-w-2xl mx-auto">
-			<h2 class="text-2xl font-medium mb-8 text-center">Testimonials</h2>
-			<div x-data="{
-				testimonials: [
-					{ quote: 'This course transformed my business!', name: 'Alex' },
-					{ quote: 'A must for anyone in AI.', name: 'Jordan' },
-					{ quote: 'Unparalleled expertise and support.', name: 'Casey' }
-				],
-				current: 0
-			}" class="border border-blue-800/50 rounded-lg p-6 text-center">
-				<template x-if="testimonials.length">
-					<div>
-						<p class="text-lg text-blue-200" x-text="testimonials[current].quote"></p>
-						<p class="mt-2 text-sm text-blue-300" x-text="testimonials[current].name"></p>
-					</div>
-				</template>
-			</div>
-		</div>
-	</section>
-
-	<!-- FINAL CTA SECTION -->
-	<section class="py-16 px-4 border-t border-blue-800/50">
-		<div class="max-w-xl mx-auto text-center">
-			<h2 class="text-2xl font-medium mb-4">Ready to Start?</h2>
-			<button onclick="document.getElementById('apply-form').scrollIntoView({behavior: 'smooth'})" 
-				class="bg-blue-600 hover:bg-blue-700 transition px-6 py-2 rounded text-sm">
-				Apply Now
-			</button>
-		</div>
 	</section>
 
 	<!-- Add this script before the closing body tag -->
@@ -276,6 +282,7 @@ var tmpl = template.Must(template.New("index").Parse(`
 			Bodies = Matter.Bodies,
 			Body = Matter.Body,
 			Mouse = Matter.Mouse,
+			MouseConstraint = Matter.MouseConstraint,
 			Events = Matter.Events;
 
 		// Create engine and world
@@ -283,8 +290,8 @@ var tmpl = template.Must(template.New("index").Parse(`
 		const world = engine.world;
 		
 		// Adjust gravity and collision settings
-		engine.world.gravity.y = 0.2;
-		engine.timing.timeScale = 1;
+		engine.world.gravity.y = 0.4;
+		engine.timing.timeScale = 1.2;
 		engine.enableSleeping = false;
 
 		// Adjust collision detection settings for better precision
@@ -304,6 +311,101 @@ var tmpl = template.Must(template.New("index").Parse(`
 				background: 'transparent',
 				pixelRatio: window.devicePixelRatio
 			}
+		});
+
+		// Add mouse control
+		const mouse = Mouse.create(render.canvas);
+		const mouseConstraint = MouseConstraint.create(engine, {
+			mouse: mouse,
+			constraint: {
+				stiffness: 0.5,
+				render: {
+					visible: false
+				}
+			},
+			collisionFilter: {
+				mask: 0x0001
+			}
+		});
+
+		// Sync mouse with renderer
+		render.mouse = mouse;
+
+		// Add mouse constraint to world
+		World.add(world, mouseConstraint);
+
+		// Prevent page scrolling when dragging
+		render.canvas.addEventListener('mousewheel', function(event) {
+			if (mouseConstraint.body) {
+				event.preventDefault();
+			}
+		});
+
+		// Prevent default touch behavior when interacting with canvas
+		render.canvas.addEventListener('touchmove', function(event) {
+			if (mouseConstraint.body) {
+				event.preventDefault();
+			}
+		}, { passive: false });
+
+		// Add hover effect for bubbles
+		Events.on(mouseConstraint, 'mousemove', function(event) {
+			const mousePosition = event.mouse.position;
+			const bodies = Matter.Composite.allBodies(world);
+			
+			bodies.forEach(body => {
+				if (!body.isStatic) {
+					const distance = Matter.Vector.magnitude(Matter.Vector.sub(body.position, mousePosition));
+					if (distance < 100) {
+						Body.setAngularVelocity(body, body.angularVelocity * 0.8);
+						Body.setVelocity(body, {
+							x: body.velocity.x * 0.8,
+							y: body.velocity.y * 0.8
+						});
+					}
+				}
+			});
+		});
+
+		// Sync cursor style with dragging state
+		Events.on(mouseConstraint, 'mousedown', function(event) {
+			const mousePosition = event.mouse.position;
+			const bodies = Matter.Composite.allBodies(world);
+			let hovering = false;
+			
+			bodies.forEach(body => {
+				if (!body.isStatic) {
+					const distance = Matter.Vector.magnitude(Matter.Vector.sub(body.position, mousePosition));
+					if (distance < 100) {
+						hovering = true;
+					}
+				}
+			});
+			
+			if (hovering) {
+				render.canvas.style.cursor = 'grabbing';
+			}
+		});
+
+		Events.on(mouseConstraint, 'mouseup', function(event) {
+			render.canvas.style.cursor = 'default';
+		});
+
+		Events.on(mouseConstraint, 'mousemove', function(event) {
+			const mousePosition = event.mouse.position;
+			const bodies = Matter.Composite.allBodies(world);
+			let hovering = false;
+			
+			bodies.forEach(body => {
+				if (!body.isStatic) {
+					const distance = Matter.Vector.magnitude(Matter.Vector.sub(body.position, mousePosition));
+					if (distance < 100) {
+						hovering = true;
+					}
+				}
+			});
+			
+			render.canvas.style.cursor = hovering ? 'grab' : 'default';
 		});
 
 		// Company logos with their image URLs
@@ -354,32 +456,34 @@ var tmpl = template.Must(template.New("index").Parse(`
 			canvas.height = size;
 			const ctx = canvas.getContext('2d');
 
-			// Draw transparent circle with white contour - this will be the exact physics boundary
+			// Draw circle with white contour
 			ctx.beginPath();
 			ctx.arc(size/2, size/2, size/2 - 2, 0, Math.PI * 2);
-			ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+			ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
 			ctx.lineWidth = 2;
 			ctx.stroke();
 
-			// Add subtle background for the circle
+			// Remove the solid background fill
+			// Add subtle ring effect instead
 			ctx.beginPath();
 			ctx.arc(size/2, size/2, size/2 - 3, 0, Math.PI * 2);
-			ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-			ctx.fill();
+			ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+			ctx.lineWidth = 1;
+			ctx.stroke();
 
-			// Add glow effect
-			ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+			// Add subtle glow effect
+			ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
 			ctx.shadowBlur = 15;
 			ctx.shadowOffsetX = 0;
 			ctx.shadowOffsetY = 0;
 
-			// Create circular clip path matching the contour exactly
+			// Create circular clip path
 			ctx.save();
 			ctx.beginPath();
 			ctx.arc(size/2, size/2, size/2 - 4, 0, Math.PI * 2);
 			ctx.clip();
 
-			// Calculate dimensions to make logo smaller (60% of the circle size)
+			// Calculate dimensions for logo
 			const maxLogoSize = size * 0.6;
 			const scale = Math.min(maxLogoSize / img.width, maxLogoSize / img.height);
 			const width = img.width * scale;
@@ -387,15 +491,15 @@ var tmpl = template.Must(template.New("index").Parse(`
 			const x = size/2 - width/2;
 			const y = size/2 - height/2;
 
-			// Draw and process image
+			// Draw image
 			ctx.drawImage(img, x, y, width, height);
 			ctx.restore();
 
 			// Add subtle inner glow
 			ctx.beginPath();
 			ctx.arc(size/2, size/2, size/2 - 3, 0, Math.PI * 2);
-			ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-			ctx.lineWidth = 4;
+			ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+			ctx.lineWidth = 2;
 			ctx.stroke();
 
 			return canvas.toDataURL();
@@ -449,7 +553,7 @@ var tmpl = template.Must(template.New("index").Parse(`
 		const columns = Math.ceil(Math.sqrt(totalBubbles)); // Calculate columns based on total bubbles
 		const rows = Math.ceil(totalBubbles / columns);
 		const columnWidth = window.innerWidth / columns;
-		const rowHeight = 400;
+		const rowHeight = 100; // Reduced from 200 to 100
 
 		// Shuffle the logos array
 		const shuffledLogos = [...logos];
@@ -463,7 +567,7 @@ var tmpl = template.Must(template.New("index").Parse(`
 			const column = i % columns;
 			const row = Math.floor(i / columns);
 			const x = columnWidth * (column + 0.5) + (Math.random() - 0.5) * columnWidth * 0.3;
-			const y = -rowHeight * row - Math.random() * 200;
+			const y = -rowHeight * row - Math.random() * 50; // Reduced from 100 to 50
 			
 			// Create bubble with specific logo instead of random
 			const img = new Image();
@@ -515,8 +619,8 @@ var tmpl = template.Must(template.New("index").Parse(`
 				);
 				
 				Body.setVelocity(bubble, {
-					x: (Math.random() - 0.5) * 1,
-					y: 1
+					x: (Math.random() - 0.5) * 2,
+					y: 2
 				});
 				
 				World.add(world, bubble);
@@ -635,21 +739,6 @@ func main() {
 	// Serve the landing page.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, nil)
-	})
-
-	// Handle form submission via HTMX.
-	http.HandleFunc("/apply", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-			return
-		}
-		// In a real-world application, process and store the form data here.
-		name := r.FormValue("name")
-		email := r.FormValue("email")
-		log.Printf("Received application: %s <%s>", name, email)
-		// Respond with a success snippet to be swapped into the page.
-		w.Header().Set("Content-Type", "text/html")
-		w.Write([]byte(`<div class="bg-green-500 p-4 rounded">Thank you for applying, ` + template.HTMLEscapeString(name) + `! We will be in touch shortly.</div>`))
 	})
 
 	log.Println("Server started at http://localhost:8080")
