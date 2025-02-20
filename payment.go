@@ -1,11 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 	"net/http"
-	"net/smtp"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -13,24 +11,6 @@ import (
 	"github.com/stripe/stripe-go/v74/checkout/session"
 	"github.com/stripe/stripe-go/v74/product"
 )
-
-// EmailData represents the data needed for sending emails
-type EmailData struct {
-	CustomerName  string
-	CustomerEmail string
-	CourseName    string
-	CompanyName   string
-	SupportEmail  string
-}
-
-// EmailConfig holds SMTP configuration
-type EmailConfig struct {
-	Host     string
-	Port     string
-	Username string
-	Password string
-	From     string
-}
 
 func init() {
 	// Load environment variables from .env file
@@ -44,89 +24,6 @@ func init() {
 		log.Fatal("STRIPE_SECRET_KEY is required")
 	}
 	stripe.Key = stripeKey
-}
-
-// sendWelcomeEmail sends a welcome email to the customer using SMTP
-func sendWelcomeEmail(data EmailData) error {
-	config := EmailConfig{
-		Host:     os.Getenv("SMTP_HOST"),
-		Port:     os.Getenv("SMTP_PORT"),
-		Username: os.Getenv("SMTP_USERNAME"),
-		Password: os.Getenv("SMTP_PASSWORD"),
-		From:     os.Getenv("SENDER_EMAIL"),
-	}
-
-	// Create HTML email template
-	htmlContent := fmt.Sprintf(`
-		<!DOCTYPE html>
-		<html>
-		<head>
-			<style>
-				body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-				.container { max-width: 600px; margin: 0 auto; padding: 20px; }
-				.header { text-align: center; padding: 20px 0; }
-				.content { background: #f9f9f9; padding: 20px; border-radius: 5px; }
-				.button { display: inline-block; padding: 12px 24px; background: #0066FF; color: white; text-decoration: none; border-radius: 5px; }
-				.footer { text-align: center; padding: 20px 0; font-size: 0.9em; color: #666; }
-			</style>
-		</head>
-		<body>
-			<div class="container">
-				<div class="header">
-					<h1>Welcome to %s!</h1>
-				</div>
-				<div class="content">
-					<p>Dear %s,</p>
-					<p>Thank you for enrolling in %s! We're excited to have you join us on this transformative journey into AI implementation and strategy.</p>
-					<p>Here's what happens next:</p>
-					<ol>
-						<li>You'll receive your login credentials within the next 10 minutes</li>
-						<li>Access to all course materials will be immediately available</li>
-						<li>You can start your learning journey right away</li>
-					</ol>
-					<p style="text-align: center; margin: 30px 0;">
-						<a href="%s/login" class="button">Access Your Course</a>
-					</p>
-					<p>If you need any assistance, our support team is here to help at <a href="mailto:%s">%s</a>.</p>
-				</div>
-				<div class="footer">
-					<p>© %s. All rights reserved.</p>
-					<p>This email was sent to %s</p>
-				</div>
-			</div>
-		</body>
-		</html>
-	`, data.CourseName, data.CustomerName, data.CourseName, os.Getenv("DOMAIN_URL"),
-		data.SupportEmail, data.SupportEmail, data.CompanyName, data.CustomerEmail)
-
-	// Set email headers
-	headers := make(map[string]string)
-	headers["From"] = fmt.Sprintf("%s <%s>", os.Getenv("SENDER_NAME"), config.From)
-	headers["To"] = data.CustomerEmail
-	headers["Subject"] = fmt.Sprintf("Welcome to %s!", data.CourseName)
-	headers["MIME-Version"] = "1.0"
-	headers["Content-Type"] = "text/html; charset=UTF-8"
-
-	// Build email message
-	var message bytes.Buffer
-	for key, value := range headers {
-		message.WriteString(fmt.Sprintf("%s: %s\r\n", key, value))
-	}
-	message.WriteString("\r\n")
-	message.WriteString(htmlContent)
-
-	// Connect to SMTP server
-	auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
-	addr := fmt.Sprintf("%s:%s", config.Host, config.Port)
-
-	// Send email
-	return smtp.SendMail(
-		addr,
-		auth,
-		config.From,
-		[]string{data.CustomerEmail},
-		message.Bytes(),
-	)
 }
 
 // createOrGetProduct ensures our product exists in Stripe
@@ -244,6 +141,9 @@ func PaymentSuccessHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Initialize email service
+	emailService := NewEmailService()
+
 	// Send welcome email
 	emailData := EmailData{
 		CustomerName:  checkoutSession.CustomerDetails.Name,
@@ -253,7 +153,7 @@ func PaymentSuccessHandler(w http.ResponseWriter, r *http.Request) {
 		SupportEmail:  os.Getenv("SUPPORT_EMAIL"),
 	}
 
-	if err := sendWelcomeEmail(emailData); err != nil {
+	if err := emailService.SendWelcomeEmail(emailData); err != nil {
 		log.Printf("Error sending welcome email: %v", err)
 		// Continue anyway, as the payment was successful
 	}
