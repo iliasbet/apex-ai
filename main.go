@@ -123,23 +123,24 @@ var tmpl = template.Must(template.New("index").Parse(`
 		}
 		/* Add styles for translucent buttons */
 		.btn-translucent {
-			background: rgba(255, 255, 255, 0.15);
+			background: rgba(255, 215, 0, 0.15);
 			backdrop-filter: blur(12px);
-			border: 2px solid rgba(255, 255, 255, 0.3);
+			border: 2px solid rgba(255, 215, 0, 0.3);
 			transition: all 0.3s ease;
-			text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-			box-shadow: 0 0 10px rgba(255, 255, 255, 0.1),
-						inset 0 0 8px rgba(255, 255, 255, 0.05);
+			text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+			box-shadow: 0 0 10px rgba(255, 215, 0, 0.1),
+						inset 0 0 8px rgba(255, 215, 0, 0.05);
 			font-weight: 600;
 			letter-spacing: 0.5px;
+			color: rgba(255, 215, 0, 0.9);  /* Gold text */
 		}
 		.btn-translucent:hover {
-			background: rgba(255, 255, 255, 0.2);
-			border-color: rgba(255, 255, 255, 0.4);
+			background: rgba(255, 215, 0, 0.2);
+			border-color: rgba(255, 215, 0, 0.4);
 			transform: translateY(-2px);
-			box-shadow: 0 0 15px rgba(255, 255, 255, 0.15),
-						inset 0 0 10px rgba(255, 255, 255, 0.1);
-			text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+			box-shadow: 0 0 15px rgba(255, 215, 0, 0.15),
+						inset 0 0 10px rgba(255, 215, 0, 0.1);
+			text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
 		}
 		/* Add glowing text effect */
 		.glow-text {
@@ -194,15 +195,16 @@ var tmpl = template.Must(template.New("index").Parse(`
 			</h1>
 			<div class="space-y-8 relative z-10">
 				<p class="text-3xl md:text-5xl lg:text-6xl font-medium text-white">
-					Turn AI into profit.
+					Turn AI into<br/>exponential growth.
 				</p>
 			</div>
-			<button onclick="document.getElementById('apply-form').scrollIntoView({behavior: 'smooth', block: 'center', duration: 1000})" 
-				class="btn-translucent px-10 py-5 rounded-lg text-xl relative z-10 mt-16 uppercase tracking-wider hover:transform hover:translate-y-[-2px] transition-all duration-300">
-				Apply Now
+			<button onclick="window.open('/payment', '_blank')" 
+				class="btn-translucent px-8 py-4 rounded-lg text-lg relative z-10 mt-16 uppercase tracking-wider hover:transform hover:translate-y-[-2px] transition-all duration-300">
+				Enroll Now
 			</button>
+
 			<div class="flex flex-col items-center gap-4 relative z-10 mt-16">
-				<p class="text-white text-lg uppercase tracking-wider font-medium" style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.9)">See More</p>
+				<p class="text-white text-lg uppercase tracking-wider font-medium" style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.9)">More</p>
 				<div class="animate-bounce pointer-events-none">
 					<svg class="w-12 h-12 text-white" style="filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.9))" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
@@ -215,23 +217,23 @@ var tmpl = template.Must(template.New("index").Parse(`
 	<!-- BUSINESS TRANSFORMATION SECTION -->
 	<section class="solutions-section min-h-[60vh] relative flex flex-col justify-center items-center py-8 px-4">
 		<div class="max-w-4xl mx-auto text-center relative z-10">
-			<h2 class="text-3xl md:text-4xl font-medium mb-3">Transform Your Business with AI</h2>
-			<p class="text-xl text-blue-200">Unlock unprecedented growth and efficiency with our end-to-end AI transformation solutions</p>
+			<h2 class="text-3xl md:text-4xl font-medium mb-3">Your AI transformation journey</h2>
+			<p class="text-xl text-blue-200">A structured approach to implementing AI in your organization</p>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
 				<div class="p-5 rounded-lg backdrop-blur-md bg-white/5 relative mt-24">
 					<div class="absolute -top-32 left-1/2 -translate-x-1/2 text-[140px] text-transparent number-outline">1</div>
-					<h3 class="text-xl font-medium mb-2 mt-8">Strategic Planning</h3>
-					<p class="text-blue-200/90">Create a tailored AI roadmap that aligns with your business objectives, market position, and growth targets. We analyze your data infrastructure, identify opportunities, and design a comprehensive implementation strategy.</p>
+					<h3 class="text-xl font-medium mb-2 mt-8">Strategic<br/>Planning</h3>
+					<p class="text-blue-200/90">Learn to develop a comprehensive AI strategy aligned with your business goals, market position, and growth targets.</p>
 				</div>
 				<div class="p-5 rounded-lg backdrop-blur-md bg-white/5 relative mt-24">
 					<div class="absolute -top-32 left-1/2 -translate-x-1/2 text-[140px] text-transparent number-outline">2</div>
-					<h3 class="text-xl font-medium mb-2 mt-8">Implementation</h3>
-					<p class="text-blue-200/90">Seamlessly integrate cutting-edge AI solutions into your workflow with our expert team. We handle everything from model development and testing to deployment and team training, ensuring minimal disruption.</p>
+					<h3 class="text-xl font-medium mb-2 mt-8">Implementation Framework</h3>
+					<p class="text-blue-200/90">Master proven methodologies for successful AI integration, from pilot projects to full-scale deployment.</p>
 				</div>
 				<div class="p-5 rounded-lg backdrop-blur-md bg-white/5 relative mt-24">
 					<div class="absolute -top-32 left-1/2 -translate-x-1/2 text-[140px] text-transparent number-outline">3</div>
-					<h3 class="text-xl font-medium mb-2 mt-8">Optimization</h3>
-					<p class="text-blue-200/90">Continuously refine and scale your AI capabilities through advanced analytics, performance monitoring, and iterative improvements. We ensure your AI systems evolve with your business needs and market demands.</p>
+					<h3 class="text-xl font-medium mb-2 mt-8">Performance Optimization</h3>
+					<p class="text-blue-200/90">Learn advanced techniques for monitoring, measuring, and maximizing the ROI of your AI investments.</p>
 				</div>
 			</div>
 		</div>
@@ -240,24 +242,24 @@ var tmpl = template.Must(template.New("index").Parse(`
 	<!-- ROI METRICS SECTION -->
 	<section class="solutions-section min-h-[60vh] relative flex flex-col justify-center items-center py-8 px-4">
 		<div class="max-w-4xl mx-auto text-center relative z-10">
-			<h2 class="text-3xl md:text-4xl font-medium mb-3">Proven Business Impact</h2>
-			<p class="text-xl text-blue-200">Our clients achieve exceptional results through strategic AI implementation</p>
+			<h2 class="text-3xl md:text-4xl font-medium mb-3">Course impact</h2>
+			<p class="text-xl text-blue-200">Real results achieved by our course graduates</p>
 			<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
 				<div class="p-5 rounded-lg backdrop-blur-md bg-white/5">
-					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">40%</h3>
-					<p class="text-blue-200/90">Average Cost Reduction in Operations</p>
+					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">85%</h3>
+					<p class="text-blue-200/90">Successfully Implemented AI Projects</p>
 				</div>
 				<div class="p-5 rounded-lg backdrop-blur-md bg-white/5">
-					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">5x</h3>
-					<p class="text-blue-200/90">Increase in Team Productivity</p>
+					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">3x</h3>
+					<p class="text-blue-200/90">Faster AI Implementation</p>
 				</div>
 				<div class="p-5 rounded-lg backdrop-blur-md bg-white/5">
-					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">60%</h3>
-					<p class="text-blue-200/90">Faster Strategic Decision-Making</p>
+					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">45%</h3>
+					<p class="text-blue-200/90">Average Cost Savings</p>
 				</div>
 				<div class="p-5 rounded-lg backdrop-blur-md bg-white/5">
-					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">24/7</h3>
-					<p class="text-blue-200/90">Automated AI-Powered Operations</p>
+					<h3 class="text-3xl font-medium mb-2" style="color: #0066FF">92%</h3>
+					<p class="text-blue-200/90">Course Satisfaction Rate</p>
 				</div>
 			</div>
 		</div>
@@ -266,60 +268,60 @@ var tmpl = template.Must(template.New("index").Parse(`
 	<!-- TRUST SECTION -->
 	<section class="solutions-section min-h-[60vh] relative flex flex-col justify-center items-center py-8 px-4">
 		<div class="max-w-4xl mx-auto text-center relative z-10">
-			<h2 class="text-3xl md:text-4xl font-medium mb-3">Trusted by Global Industry Leaders</h2>
-			<p class="text-xl text-blue-200">Join the ranks of forward-thinking companies transforming their industries with APEX AI</p>
+			<h2 class="text-3xl md:text-4xl font-medium mb-3">What our students say</h2>
+			<p class="text-xl text-blue-200">Hear from executives who've transformed their organizations through our course</p>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
 				<div class="p-6 rounded-lg backdrop-blur-md bg-white/5 text-left">
 					<div class="flex items-start mb-4">
 						<div class="flex-1">
 							<h3 class="text-lg font-medium text-white">Sarah Chen</h3>
-							<p class="text-sm text-blue-200">Chief Technology Officer, TechVision Global</p>
+							<p class="text-sm text-blue-200">Chief Innovation Officer, TechVision Global</p>
 							<div class="flex items-center mt-1">
 								<span class="text-yellow-400">★★★★★</span>
 							</div>
 						</div>
 						<div class="text-3xl text-blue-200/50">"</div>
 					</div>
-					<p class="text-blue-200/90 italic">APEX AI revolutionized our data analytics capabilities, delivering insights that were previously unattainable. Their expertise in implementing AI solutions has given us a significant competitive advantage in our market.</p>
+					<p class="text-blue-200/90 italic">The course provided exactly what I needed - a structured approach to AI implementation. The strategic frameworks and practical tools have been invaluable in our digital transformation journey.</p>
 				</div>
 				<div class="p-6 rounded-lg backdrop-blur-md bg-white/5 text-left">
 					<div class="flex items-start mb-4">
 						<div class="flex-1">
 							<h3 class="text-lg font-medium text-white">Marcus Rodriguez</h3>
-							<p class="text-sm text-blue-200">Chief Executive Officer, InnovateCorp</p>
+							<p class="text-sm text-blue-200">CEO, InnovateCorp</p>
 							<div class="flex items-center mt-1">
 								<span class="text-yellow-400">★★★★★</span>
 							</div>
 						</div>
 						<div class="text-3xl text-blue-200/50">"</div>
 					</div>
-					<p class="text-blue-200/90 italic">The ROI we've achieved since partnering with APEX AI has exceeded all expectations. Their strategic guidance and technical expertise have been instrumental in our digital transformation journey.</p>
+					<p class="text-blue-200/90 italic">This course demystified AI implementation and gave me the confidence to lead our organization's AI initiatives. The ROI frameworks and risk assessment tools are particularly valuable.</p>
 				</div>
 				<div class="p-6 rounded-lg backdrop-blur-md bg-white/5 text-left">
 					<div class="flex items-start mb-4">
 						<div class="flex-1">
 							<h3 class="text-lg font-medium text-white">Emily Zhang</h3>
-							<p class="text-sm text-blue-200">Head of Innovation, FutureScale Technologies</p>
+							<p class="text-sm text-blue-200">Director of Strategy, FutureScale Technologies</p>
 							<div class="flex items-center mt-1">
 								<span class="text-yellow-400">★★★★★</span>
 							</div>
 						</div>
 						<div class="text-3xl text-blue-200/50">"</div>
 					</div>
-					<p class="text-blue-200/90 italic">Working with APEX AI has accelerated our AI adoption timeline by years. Their comprehensive implementation strategy and hands-on approach ensured a smooth transition to AI-powered operations.</p>
+					<p class="text-blue-200/90 italic">The DIY approach with expert guidance was perfect. I've applied the course frameworks to launch three successful AI initiatives within six months of completion.</p>
 				</div>
 				<div class="p-6 rounded-lg backdrop-blur-md bg-white/5 text-left">
 					<div class="flex items-start mb-4">
 						<div class="flex-1">
 							<h3 class="text-lg font-medium text-white">David Park</h3>
-							<p class="text-sm text-blue-200">Director of AI Operations, DataFlow Systems</p>
+							<p class="text-sm text-blue-200">CTO, DataFlow Systems</p>
 							<div class="flex items-center mt-1">
 								<span class="text-yellow-400">★★★★★</span>
 							</div>
 						</div>
 						<div class="text-3xl text-blue-200/50">"</div>
 					</div>
-					<p class="text-blue-200/90 italic">APEX AI doesn't just implement solutions; they become true partners in your AI journey. Their deep technical knowledge and strategic insights have transformed our business operations and market position.</p>
+					<p class="text-blue-200/90 italic">The course's practical approach to AI strategy and implementation has been transformative. We've achieved significant cost savings and efficiency gains using the methodologies taught.</p>
 				</div>
 			</div>
 		</div>
@@ -328,25 +330,25 @@ var tmpl = template.Must(template.New("index").Parse(`
 	<!-- EXPERTISE SECTION -->
 	<section class="solutions-section min-h-[60vh] relative flex flex-col justify-center items-center py-8 px-4">
 		<div class="max-w-4xl mx-auto text-center relative z-10">
-			<h2 class="text-3xl md:text-4xl font-medium mb-3">World-Class Expertise</h2>
-			<p class="text-xl text-blue-200">Backed by a team of industry veterans and AI specialists</p>
+			<h2 class="text-3xl md:text-4xl font-medium mb-3">What you'll learn</h2>
+			<p class="text-xl text-blue-200">Comprehensive curriculum designed for business leaders</p>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
 				<div class="p-6 rounded-lg backdrop-blur-md bg-white/5">
-					<h3 class="text-2xl font-medium mb-3">Technical Excellence</h3>
+					<h3 class="text-2xl font-medium mb-3">Strategic Leadership</h3>
 					<ul class="text-left text-blue-200/90 space-y-2">
-						<li>• State-of-the-Art AI Model Development</li>
-						<li>• Enterprise-Grade Solution Architecture</li>
-						<li>• Cloud-Native Infrastructure Design</li>
-						<li>• Advanced Security & Compliance</li>
+						<li>• AI strategy development</li>
+						<li>• Risk assessment & management</li>
+						<li>• Change management</li>
+						<li>• ROI optimization</li>
 					</ul>
 				</div>
 				<div class="p-6 rounded-lg backdrop-blur-md bg-white/5">
-					<h3 class="text-2xl font-medium mb-3">Business Acumen</h3>
+					<h3 class="text-2xl font-medium mb-3">Technical Understanding</h3>
 					<ul class="text-left text-blue-200/90 space-y-2">
-						<li>• Data-Driven ROI Optimization</li>
-						<li>• Custom Industry Solutions</li>
-						<li>• Enterprise Change Management</li>
-						<li>• Long-Term Growth Strategy</li>
+						<li>• AI technology evaluation</li>
+						<li>• Implementation best practices</li>
+						<li>• Integration planning</li>
+						<li>• Performance monitoring</li>
 					</ul>
 				</div>
 			</div>
@@ -367,8 +369,10 @@ var tmpl = template.Must(template.New("index").Parse(`
 		// Company logos
 		const logos = [
 			{ name: 'OpenAI', url: '/assets/logos/openai.png' },
+			{ name: 'Claude', url: '/assets/logos/claude.png' },
 			{ name: 'Anthropic', url: '/assets/logos/anthropic.png' },
 			{ name: 'DeepMind', url: '/assets/logos/deepmind.png' },
+			{ name: 'Hugging Face', url: '/assets/logos/huggingface.png' },
 			{ name: 'Cohere', url: '/assets/logos/cohere.png' },
 			{ name: 'Grok', url: '/assets/logos/grok.png' },
 			{ name: 'Stability', url: '/assets/logos/stability.png' },
@@ -735,18 +739,18 @@ var tmpl = template.Must(template.New("index").Parse(`
 				<div>
 					<h3 class="text-xl font-medium mb-4">APEX AI</h3>
 					<p class="text-blue-200/90 text-sm">
-						Leading the future of AI-driven business transformation.
+						Empowering executives with the knowledge and tools to lead AI transformation.
 					</p>
 				</div>
 				
 				<!-- Quick Links -->
 				<div>
-					<h3 class="text-lg font-medium mb-4">Quick Links</h3>
+					<h3 class="text-lg font-medium mb-4">Course Info</h3>
 					<ul class="space-y-2 text-sm">
-						<li><a href="#" class="text-blue-200/90 hover:text-white transition">About Us</a></li>
-						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Services</a></li>
-						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Case Studies</a></li>
-						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Contact</a></li>
+						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Curriculum</a></li>
+						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Success Stories</a></li>
+						<li><a href="#" class="text-blue-200/90 hover:text-white transition">FAQs</a></li>
+						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Support</a></li>
 					</ul>
 				</div>
 				
@@ -756,8 +760,8 @@ var tmpl = template.Must(template.New("index").Parse(`
 					<ul class="space-y-2 text-sm">
 						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Terms of Service</a></li>
 						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Privacy Policy</a></li>
-						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Cookie Policy</a></li>
-						<li><a href="#" class="text-blue-200/90 hover:text-white transition">GDPR Compliance</a></li>
+						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Refund Policy</a></li>
+						<li><a href="#" class="text-blue-200/90 hover:text-white transition">Course License</a></li>
 					</ul>
 				</div>
 				
@@ -765,9 +769,9 @@ var tmpl = template.Must(template.New("index").Parse(`
 				<div>
 					<h3 class="text-lg font-medium mb-4">Contact Us</h3>
 					<ul class="space-y-2 text-sm">
-						<li class="text-blue-200/90">Email: contact@apexai.com</li>
-						<li class="text-blue-200/90">Phone: +1 (555) 123-4567</li>
-						<li class="text-blue-200/90">Location: San Francisco, CA</li>
+						<li class="text-blue-200/90">Email: learn@apexai.com</li>
+						<li class="text-blue-200/90">Support: +1 (555) 123-4567</li>
+						<li class="text-blue-200/90">Hours: 24/7 Online Access</li>
 					</ul>
 				</div>
 			</div>
@@ -778,6 +782,7 @@ var tmpl = template.Must(template.New("index").Parse(`
 					<div class="text-sm text-blue-200/90">
 						© 2024 APEX AI. All rights reserved.
 					</div>
+					<p class="text-xs text-blue-200/50">This course is designed for educational purposes. Results may vary based on individual effort and organizational context.</p>
 					<div class="flex gap-6">
 						<a href="#" class="text-blue-200/90 hover:text-white transition">
 							<span class="sr-only">LinkedIn</span>
@@ -816,10 +821,14 @@ func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	// Serve the landing page.
+	// Serve the landing page
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, nil)
 	})
+
+	// Payment routes
+	http.HandleFunc("/payment", PaymentHandler)
+	http.HandleFunc("/payment-success", PaymentSuccessHandler)
 
 	log.Println("Server started at http://localhost:3000")
 	http.ListenAndServe(":3000", nil)
